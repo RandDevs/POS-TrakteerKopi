@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane stylesheets="@style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.traktirkopi.ShiftController">
+
+   <!-- Closed State View -->
+   <VBox fx:id="closedView" alignment="CENTER" spacing="30" style="-fx-background-color: transparent;">
+      <Label style="-fx-font-size: 80px;" text="☕" />
+      <VBox alignment="CENTER" spacing="10">
+         <Label style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #1a1c1c;" text="Cashier Shift Closed" />
+         <Label style="-fx-font-size: 16px; -fx-text-fill: #82746f;" text="Start a new shift to begin processing transactions." />
+      </VBox>
+      <Button mnemonicParsing="false" onAction="#startShift" style="-fx-background-color: #536346; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 15 40; -fx-background-radius: 8; -fx-cursor: hand;" text="Start Shift" />
+   </VBox>
+
+   <!-- Open State View -->
+   <VBox fx:id="openView" alignment="CENTER" spacing="40" style="-fx-background-color: transparent;" visible="false">
+      
+      <VBox alignment="CENTER" spacing="20" style="-fx-background-color: white; -fx-border-color: #d3c3bc; -fx-border-radius: 16; -fx-background-radius: 16; -fx-padding: 50 80; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 5);">
+         
+         <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1a1c1c;" text="Shift Status: OPEN" />
+         
+         <VBox alignment="CENTER" spacing="10" style="-fx-border-color: #e2e2e2; -fx-border-width: 1 0 1 0; -fx-padding: 20 0;">
+            <Label fx:id="lblStartTime" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #536346;" text="Start Time: --" />
+            <Label style="-fx-font-size: 14px; -fx-text-fill: #82746f;" text="Sales data is hidden for blind closing." />
+         </VBox>
+         
+         <Button mnemonicParsing="false" onAction="#endShift" style="-fx-background-color: #b3261e; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 15 40; -fx-background-radius: 8; -fx-cursor: hand;" text="End Shift" />
+         
+      </VBox>
+      
+   </VBox>
+
+</StackPane>

@@ -28,8 +28,8 @@
                <children>
                   <Button fx:id="btnSidebarPOS" mnemonicParsing="false" onAction="#showPosView" styleClass="sidebar-btn-active" text="POS" />
                   <Button fx:id="btnSidebarBackoffice" mnemonicParsing="false" onAction="#showBackofficeView" styleClass="sidebar-btn" text="Back Office" />
-                  <Button mnemonicParsing="false" styleClass="sidebar-btn" text="Orders" />
-                  <Button mnemonicParsing="false" styleClass="sidebar-btn" text="Shift" />
+                  <Button fx:id="btnSidebarOrders" mnemonicParsing="false" onAction="#showOrdersView" styleClass="sidebar-btn" text="Orders" />
+                  <Button fx:id="btnSidebarShift" mnemonicParsing="false" onAction="#showShiftView" styleClass="sidebar-btn" text="Shift" />
                </children>
                <VBox.margin>
                   <Insets top="20.0" />

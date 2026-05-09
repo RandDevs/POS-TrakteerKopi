@@ -18,7 +18,7 @@
          <Insets bottom="20" left="30" right="30" top="20" />
       </padding>
       <children>
-         <Label styleClass="text-h1" text="Back Office — Menu Management" />
+         <Label styleClass="text-h1" text="Menu Management" />
          <Region HBox.hgrow="ALWAYS" />
          <TextField fx:id="searchField" promptText="🔍  Search menu..." styleClass="backoffice-search" prefWidth="240" />
          <Button mnemonicParsing="false" onAction="#addNewMenu" styleClass="backoffice-btn-add" text="+ Add New Menu" />

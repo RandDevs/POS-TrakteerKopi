@@ -62,6 +62,8 @@ public class PrimaryController {
     @FXML private ScrollPane catalogScroll;
     @FXML private VBox cartSidebar;
     @FXML private Button btnSidebarPOS;
+    @FXML private Button btnSidebarOrders;
+    @FXML private Button btnSidebarShift;
     @FXML private Button btnSidebarBackoffice;
 
     private ObservableList<CartItem> cartData = FXCollections.observableArrayList();
@@ -90,6 +92,39 @@ public class PrimaryController {
         savedPosTop = centerPane.getTop();
         savedPosCenter = centerPane.getCenter();
         savedPosRight = centerPane.getRight();
+
+        // Enforce gatekeeper logic on startup
+        refreshPosViewState();
+    }
+
+    public void refreshPosViewState() {
+        if (!DataStore.isShiftOpen) {
+            centerPane.setTop(null);
+            centerPane.setRight(null);
+            
+            VBox closedBox = new VBox(20);
+            closedBox.setAlignment(Pos.CENTER);
+            
+            Label icon = new Label("🔒");
+            icon.setStyle("-fx-font-size: 64px;");
+            
+            Label message = new Label("Shift is currently closed.");
+            message.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1a1c1c;");
+            
+            Label subMessage = new Label("Please start a shift to begin taking orders.");
+            subMessage.setStyle("-fx-font-size: 16px; -fx-text-fill: #82746f;");
+            
+            Button btnGoShift = new Button("Go to Shift Menu");
+            btnGoShift.setStyle("-fx-background-color: #715547; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 10 20; -fx-cursor: hand;");
+            btnGoShift.setOnAction(e -> showShiftView());
+            
+            closedBox.getChildren().addAll(icon, message, subMessage, btnGoShift);
+            centerPane.setCenter(closedBox);
+        } else {
+            centerPane.setTop(savedPosTop);
+            centerPane.setCenter(savedPosCenter);
+            centerPane.setRight(savedPosRight);
+        }
     }
 
     @FXML
@@ -483,12 +518,27 @@ public class PrimaryController {
         instructionLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #82746f;");
         instructionLabel.setTextAlignment(TextAlignment.CENTER);
 
-        Button btnDone = new Button("\u2713  Done \u2014 Payment Received");
+        Button btnDone = new Button("Done");
         btnDone.setMaxWidth(Double.MAX_VALUE);
-        btnDone.setStyle("-fx-background-color: #536346; -fx-text-fill: white; -fx-background-radius: 12; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 14; -fx-cursor: hand;");
+        btnDone.setStyle("-fx-background-color: #536346; -fx-text-fill: white; -fx-background-radius: 8; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10; -fx-cursor: hand;");
         btnDone.setOnAction(e -> {
+            // Save Transaction
+            double sub = 0;
+            for (CartItem ci : cartData) sub += (ci.getPrice() * ci.getQty());
+            double tx = sub * 0.11;
+            
+            Transaction t = new Transaction(
+                DataStore.generateOrderId(), 
+                customerNameField.getText(), 
+                "QRIS", 
+                sub, tx, totalBelanja, 
+                new ArrayList<>(cartData)
+            );
+            DataStore.transactions.add(0, t);
+            
             modal.close();
             cartData.clear();
+            customerNameField.clear();
             hitungTotal();
         });
 
@@ -619,8 +669,24 @@ public class PrimaryController {
                     errorLabel.setText(String.format(Locale.US, "\u26a0 Uang kurang! Kurang Rp %,.0f", totalBelanja - paid));
                     return;
                 }
+                
+                // Save Transaction
+                double sub = 0;
+                for (CartItem ci : cartData) sub += (ci.getPrice() * ci.getQty());
+                double tx = sub * 0.11;
+                
+                Transaction t = new Transaction(
+                    DataStore.generateOrderId(), 
+                    customerNameField.getText(), 
+                    "Cash", 
+                    sub, tx, totalBelanja, 
+                    new ArrayList<>(cartData)
+                );
+                DataStore.transactions.add(0, t);
+
                 modal.close();
                 cartData.clear();
+                customerNameField.clear();
                 hitungTotal();
             } catch (NumberFormatException ex) {
                 errorLabel.setText("\u26a0 Input tidak valid.");
@@ -698,24 +764,97 @@ public class PrimaryController {
     // ── Navigation Logic ────────────────────────────────────────────────
     @FXML
     private void showPosView() {
-        // Toggle active button style
         btnSidebarBackoffice.getStyleClass().remove("sidebar-btn-active");
         btnSidebarBackoffice.getStyleClass().add("sidebar-btn");
+        
+        if (btnSidebarOrders != null) {
+            btnSidebarOrders.getStyleClass().remove("sidebar-btn-active");
+            btnSidebarOrders.getStyleClass().add("sidebar-btn");
+        }
+
+        if (btnSidebarShift != null) {
+            btnSidebarShift.getStyleClass().remove("sidebar-btn-active");
+            btnSidebarShift.getStyleClass().add("sidebar-btn");
+        }
         
         btnSidebarPOS.getStyleClass().remove("sidebar-btn");
         btnSidebarPOS.getStyleClass().add("sidebar-btn-active");
 
-        // Restore POS view
-        centerPane.setTop(savedPosTop);
-        centerPane.setCenter(savedPosCenter);
-        centerPane.setRight(savedPosRight);
+        refreshPosViewState();
+    }
+
+    @FXML
+    private void showOrdersView() {
+        btnSidebarPOS.getStyleClass().remove("sidebar-btn-active");
+        btnSidebarPOS.getStyleClass().add("sidebar-btn");
+        
+        btnSidebarBackoffice.getStyleClass().remove("sidebar-btn-active");
+        btnSidebarBackoffice.getStyleClass().add("sidebar-btn");
+        
+        if (btnSidebarOrders != null) {
+            btnSidebarOrders.getStyleClass().remove("sidebar-btn");
+            btnSidebarOrders.getStyleClass().add("sidebar-btn-active");
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/traktirkopi/orders.fxml"));
+            Parent ordersView = loader.load();
+            centerPane.setTop(null);
+            centerPane.setRight(null);
+            centerPane.setCenter(ordersView);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void showShiftView() {
+        btnSidebarPOS.getStyleClass().remove("sidebar-btn-active");
+        btnSidebarPOS.getStyleClass().add("sidebar-btn");
+        
+        btnSidebarBackoffice.getStyleClass().remove("sidebar-btn-active");
+        btnSidebarBackoffice.getStyleClass().add("sidebar-btn");
+        
+        if (btnSidebarOrders != null) {
+            btnSidebarOrders.getStyleClass().remove("sidebar-btn-active");
+            btnSidebarOrders.getStyleClass().add("sidebar-btn");
+        }
+
+        if (btnSidebarShift != null) {
+            btnSidebarShift.getStyleClass().remove("sidebar-btn");
+            btnSidebarShift.getStyleClass().add("sidebar-btn-active");
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/traktirkopi/shift.fxml"));
+            Parent shiftView = loader.load();
+            
+            // Pass reference to PrimaryController so shift view can force refresh POS
+            ShiftController shiftController = loader.getController();
+            shiftController.setPrimaryController(this);
+
+            centerPane.setTop(null);
+            centerPane.setRight(null);
+            centerPane.setCenter(shiftView);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void showBackofficeView() {
-        // Toggle active button style
         btnSidebarPOS.getStyleClass().remove("sidebar-btn-active");
         btnSidebarPOS.getStyleClass().add("sidebar-btn");
+        
+        if (btnSidebarOrders != null) {
+            btnSidebarOrders.getStyleClass().remove("sidebar-btn-active");
+            btnSidebarOrders.getStyleClass().add("sidebar-btn");
+        }
+
+        if (btnSidebarShift != null) {
+            btnSidebarShift.getStyleClass().remove("sidebar-btn-active");
+            btnSidebarShift.getStyleClass().add("sidebar-btn");
+        }
         
         btnSidebarBackoffice.getStyleClass().remove("sidebar-btn");
         btnSidebarBackoffice.getStyleClass().add("sidebar-btn-active");

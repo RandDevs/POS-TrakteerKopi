@@ -18,6 +18,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
 import java.util.Locale;
 import java.util.Optional;
 
@@ -148,29 +158,56 @@ public class BackofficeController {
             private final Button btnDelete = new Button("✖");
             private final HBox box = new HBox(8, btnEdit, btnDelete);
             {
-                btnEdit.setStyle("-fx-background-color: #f7f3f0; -fx-text-fill: #715547; -fx-font-size: 14px; -fx-background-radius: 8; -fx-padding: 4 10; -fx-cursor: hand;");
-                btnDelete.setStyle("-fx-background-color: transparent; -fx-text-fill: #b3261e; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 4 10; -fx-cursor: hand;");
+                btnEdit.setStyle("-fx-background-color: #f7f3f0; -fx-text-fill: #715547; -fx-font-size: 18px; -fx-background-radius: 8; -fx-padding: 6 12; -fx-cursor: hand;");
+                btnDelete.setStyle("-fx-background-color: transparent; -fx-text-fill: #b3261e; -fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 6 12; -fx-cursor: hand;");
                 box.setAlignment(Pos.CENTER);
 
                 btnEdit.setOnAction(e -> {
                     Product item = getTableView().getItems().get(getIndex());
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Edit Menu");
-                    alert.setHeaderText("Edit: " + item.getName());
-                    alert.setContentText("Edit form will be implemented with database integration.");
-                    alert.showAndWait();
+                    showProductModal(item);
                 });
 
                 btnDelete.setOnAction(e -> {
                     Product item = getTableView().getItems().get(getIndex());
-                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-                    confirm.setTitle("Delete Menu");
-                    confirm.setHeaderText("Delete \"" + item.getName() + "\"?");
-                    confirm.setContentText("This action cannot be undone.");
-                    Optional<ButtonType> result = confirm.showAndWait();
-                    if (result.isPresent() && result.get() == ButtonType.OK) {
+                    
+                    Stage modal = new Stage();
+                    modal.initModality(Modality.APPLICATION_MODAL);
+                    modal.initStyle(StageStyle.UNDECORATED);
+
+                    VBox root = new VBox(20);
+                    root.setPadding(new Insets(30, 40, 30, 40));
+                    root.setAlignment(Pos.CENTER);
+                    root.setStyle("-fx-background-color: #fdfcfb; -fx-background-radius: 16; -fx-border-color: #d3c3bc; -fx-border-radius: 16; -fx-border-width: 1; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 15, 0, 0, 5);");
+
+                    Label titleLabel = new Label("Delete Product");
+                    titleLabel.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1a1c1c;");
+
+                    Label msgLabel = new Label("Are you sure you want to delete " + item.getName() + "?");
+                    msgLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #50443f;");
+                    msgLabel.setWrapText(true);
+
+                    HBox buttonBox = new HBox(12);
+                    buttonBox.setAlignment(Pos.CENTER);
+                    buttonBox.setPadding(new Insets(10, 0, 0, 0));
+
+                    Button btnCancel = new Button("Cancel");
+                    btnCancel.setStyle("-fx-background-color: transparent; -fx-text-fill: #82746f; -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 10 20;");
+                    btnCancel.setOnAction(ev -> modal.close());
+
+                    Button btnConfirmDelete = new Button("Delete");
+                    btnConfirmDelete.setStyle("-fx-background-color: #b3261e; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand; -fx-padding: 10 24;");
+                    btnConfirmDelete.setOnAction(ev -> {
                         allMenuItems.remove(item);
-                    }
+                        modal.close();
+                    });
+
+                    buttonBox.getChildren().addAll(btnCancel, btnConfirmDelete);
+                    root.getChildren().addAll(titleLabel, msgLabel, buttonBox);
+
+                    Scene scene = new Scene(root, 360, 220);
+                    scene.setFill(null);
+                    modal.setScene(scene);
+                    modal.showAndWait();
                 });
             }
 
@@ -198,10 +235,121 @@ public class BackofficeController {
 
     @FXML
     private void addNewMenu() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Add New Menu");
-        alert.setHeaderText("Add New Menu Item");
-        alert.setContentText("The add menu form will be implemented with database integration.");
-        alert.showAndWait();
+        showProductModal(null);
+    }
+
+    private void showProductModal(Product productToEdit) {
+        boolean isEditMode = (productToEdit != null);
+        String titleText = isEditMode ? "Edit Product" : "Add New Product";
+
+        Stage modal = new Stage();
+        modal.initModality(Modality.APPLICATION_MODAL);
+        modal.initStyle(StageStyle.UNDECORATED);
+        modal.setTitle(titleText);
+
+        VBox root = new VBox(16);
+        root.setPadding(new Insets(30, 40, 40, 40));
+        root.setAlignment(Pos.TOP_CENTER);
+        root.setStyle("-fx-background-color: #fdfcfb; -fx-background-radius: 16; -fx-border-color: #d3c3bc; -fx-border-radius: 16; -fx-border-width: 1; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 15, 0, 0, 5);");
+
+        Label titleLabel = new Label(titleText);
+        titleLabel.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1a1c1c;");
+
+        // Form Fields
+        VBox formBox = new VBox(12);
+        
+        Label nameLabel = new Label("Product Name");
+        nameLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #50443f;");
+        TextField nameField = new TextField();
+        nameField.setPromptText("Enter product name");
+        nameField.setStyle("-fx-background-color: white; -fx-border-color: #e2e2e2; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10;");
+        if (isEditMode) nameField.setText(productToEdit.getName());
+
+        Label catLabel = new Label("Category");
+        catLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #50443f;");
+        ComboBox<String> categoryCombo = new ComboBox<>(FXCollections.observableArrayList("Coffee", "Non-Coffee", "Snacks", "Seasonal"));
+        categoryCombo.setPromptText("Select category");
+        categoryCombo.setMaxWidth(Double.MAX_VALUE);
+        categoryCombo.setStyle("-fx-background-color: white; -fx-border-color: #e2e2e2; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 4;");
+        if (isEditMode) categoryCombo.setValue(productToEdit.getCategory());
+
+        Label priceLabel = new Label("Price (Rp)");
+        priceLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #50443f;");
+        TextField priceField = new TextField();
+        priceField.setPromptText("Enter price (e.g. 25000)");
+        priceField.setStyle("-fx-background-color: white; -fx-border-color: #e2e2e2; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10;");
+        if (isEditMode) priceField.setText(String.format(Locale.US, "%.0f", productToEdit.getPrice()));
+
+        Label imageLabel = new Label("Image URL");
+        imageLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #50443f;");
+        TextField imageField = new TextField();
+        imageField.setPromptText("Enter image URL");
+        imageField.setStyle("-fx-background-color: white; -fx-border-color: #e2e2e2; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10;");
+        if (isEditMode) imageField.setText(productToEdit.getImagePath());
+
+        formBox.getChildren().addAll(nameLabel, nameField, catLabel, categoryCombo, priceLabel, priceField, imageLabel, imageField);
+
+        Label errorLabel = new Label();
+        errorLabel.setStyle("-fx-text-fill: #b3261e; -fx-font-size: 12px;");
+
+        // Action Buttons
+        HBox buttonBox = new HBox(12);
+        buttonBox.setAlignment(Pos.CENTER_RIGHT);
+        buttonBox.setPadding(new Insets(16, 0, 0, 0));
+
+        Button btnCancel = new Button("Cancel");
+        btnCancel.setStyle("-fx-background-color: transparent; -fx-text-fill: #82746f; -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 10 16;");
+        btnCancel.setOnAction(e -> modal.close());
+
+        Button btnSave = new Button("Save Product");
+        btnSave.setStyle("-fx-background-color: #536346; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand; -fx-padding: 10 24;");
+        btnSave.setOnAction(e -> {
+            String name = nameField.getText().trim();
+            String cat = categoryCombo.getValue();
+            String priceStr = priceField.getText().trim();
+            String imgUrl = imageField.getText().trim();
+
+            if (name.isEmpty() || cat == null || priceStr.isEmpty()) {
+                errorLabel.setText("⚠ Please fill out Name, Category, and Price.");
+                return;
+            }
+
+            double price;
+            try {
+                price = Double.parseDouble(priceStr.replaceAll("[^0-9.]", ""));
+            } catch (NumberFormatException ex) {
+                errorLabel.setText("⚠ Invalid price format.");
+                return;
+            }
+
+            if (imgUrl.isEmpty()) {
+                // Default placeholder
+                imgUrl = "https://cdn-icons-png.flaticon.com/128/924/924514.png";
+            }
+
+            if (isEditMode) {
+                productToEdit.setName(name);
+                productToEdit.setCategory(cat);
+                productToEdit.setPrice(price);
+                productToEdit.setImagePath(imgUrl);
+                menuTable.refresh();
+            } else {
+                Product newProduct = new Product(name, price, cat, imgUrl);
+                allMenuItems.add(0, newProduct);
+            }
+
+            modal.close();
+        });
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        buttonBox.getChildren().addAll(spacer, btnCancel, btnSave);
+
+        root.getChildren().addAll(titleLabel, formBox, errorLabel, buttonBox);
+
+        Scene scene = new Scene(root, 400, 560);
+        scene.setFill(null);
+        modal.setScene(scene);
+        modal.showAndWait();
     }
 }

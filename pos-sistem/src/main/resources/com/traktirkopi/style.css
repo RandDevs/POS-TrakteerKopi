@@ -519,8 +519,8 @@
 .backoffice-search {
   -fx-background-color: -fx-bg-main;
   -fx-border-color: -fx-outline;
-  -fx-border-radius: 20;
-  -fx-background-radius: 20;
+  -fx-border-radius: 8;
+  -fx-background-radius: 8;
   -fx-padding: 8 16;
   -fx-font-size: 13px;
 }
