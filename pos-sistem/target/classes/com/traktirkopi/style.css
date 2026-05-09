@@ -1,0 +1,132 @@
+/* =========================================
+   TRAKTEER KOPI - STITCH DESIGN SYSTEM
+   ========================================= */
+
+.root {
+  /* Color Variables dari Tailwind Config */
+  -fx-bg-main: #f7f3f0;
+  -fx-bg-surface: #fdfcfb;
+  -fx-primary: #715547;
+  -fx-primary-fixed: #ffdbcb;
+  -fx-secondary: #536346; /* Hijau kecoklatan untuk tombol Bayar */
+  -fx-secondary-hover: #435138;
+  -fx-text-surface: #1a1c1c;
+  -fx-text-variant: #50443f;
+  -fx-outline: #e2e2e2;
+
+  -fx-font-family: "Segoe UI", "Manrope", sans-serif;
+  -fx-background-color: -fx-bg-main;
+}
+
+/* --- Layout Components --- */
+.side-navbar {
+  -fx-background-color: -fx-bg-main;
+  -fx-border-color: -fx-outline;
+  -fx-border-width: 0 1 0 0; /* Border kanan saja */
+}
+
+.top-header {
+  -fx-background-color: -fx-bg-surface;
+  -fx-border-color: -fx-outline;
+  -fx-border-width: 0 0 1 0; /* Border bawah saja */
+}
+
+.cart-sidebar {
+  -fx-background-color: -fx-bg-surface;
+  -fx-border-color: -fx-outline;
+  -fx-border-width: 0 0 0 1; /* Border kiri saja */
+}
+
+/* --- Typography --- */
+.text-h1 {
+  -fx-font-size: 20px;
+  -fx-font-weight: bold;
+  -fx-text-fill: -fx-text-surface;
+}
+
+.text-title {
+  -fx-font-size: 18px;
+  -fx-font-weight: bold;
+  -fx-text-fill: -fx-text-surface;
+}
+
+.text-subtitle {
+  -fx-font-size: 12px;
+  -fx-text-fill: -fx-text-variant;
+}
+
+/* --- Product Cards --- */
+.product-card {
+  -fx-background-color: white;
+  -fx-background-radius: 12;
+  -fx-border-color: -fx-outline;
+  -fx-border-radius: 12;
+  -fx-padding: 15;
+  -fx-cursor: hand;
+  /* Meniru shadow-sm dari Tailwind */
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.03), 10, 0, 0, 2);
+}
+
+.product-card:hover {
+  -fx-border-color: -fx-primary-fixed;
+  -fx-background-color: #f9f9f9;
+}
+
+.product-icon-box {
+  -fx-background-color: #eeeeee;
+  -fx-background-radius: 8;
+  -fx-alignment: center;
+}
+
+.price-text {
+  -fx-text-fill: -fx-primary;
+  -fx-font-size: 16px;
+  -fx-font-weight: bold;
+}
+
+/* --- Buttons --- */
+.btn-add {
+  -fx-background-color: -fx-primary-fixed;
+  -fx-text-fill: -fx-primary;
+  -fx-background-radius: 20;
+  -fx-font-weight: bold;
+  -fx-cursor: hand;
+}
+
+.btn-add:hover {
+  -fx-background-color: -fx-primary;
+  -fx-text-fill: white;
+}
+
+.btn-charge {
+  -fx-background-color: -fx-secondary;
+  -fx-text-fill: white;
+  -fx-background-radius: 12;
+  -fx-font-size: 18px;
+  -fx-font-weight: bold;
+  -fx-padding: 15;
+  -fx-cursor: hand;
+}
+
+.btn-charge:hover {
+  -fx-background-color: -fx-secondary-hover;
+}
+
+/* --- Top Menu Tabs --- */
+.menu-tab {
+  -fx-text-fill: #82746f;
+  -fx-cursor: hand;
+  -fx-padding: 0 0 5 0;
+  -fx-font-size: 14px;
+}
+
+.menu-tab:hover {
+  -fx-text-fill: #1a1c1c;
+}
+
+.active-tab {
+  -fx-text-fill: #1a1c1c;
+  -fx-border-color: #1a1c1c;
+  -fx-border-width: 0 0 2 0;
+  -fx-font-weight: bold;
+}

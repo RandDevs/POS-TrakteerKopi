@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.traktirkopi.PaymentController"
+           stylesheets="@style.css"
+           style="-fx-background-color: #fdf6ee;">
+
+   <VBox alignment="TOP_CENTER" maxWidth="520" spacing="0"
+         style="-fx-background-color: white; -fx-background-radius: 16; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 20, 0, 0, 6);">
+      <padding>
+         <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
+      </padding>
+
+      <!-- Header -->
+      <Label text="☕ Trakteer Kopi" style="-fx-font-size: 16px; -fx-text-fill: #8d6e63; -fx-font-weight: bold;" />
+      <Label text="Halaman Pembayaran" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #3e2723;">
+         <VBox.margin><Insets top="4.0" bottom="20.0" /></VBox.margin>
+      </Label>
+
+      <!-- Garis pembatas -->
+      <Label maxWidth="1.7976931348623157E308"
+             style="-fx-border-color: #e8d8c5; -fx-border-width: 1 0 0 0; -fx-pref-height: 1;">
+         <VBox.margin><Insets bottom="20.0" /></VBox.margin>
+      </Label>
+
+      <!-- Total -->
+      <HBox alignment="CENTER_LEFT" spacing="10">
+         <Label text="Total Tagihan" style="-fx-font-size: 14px; -fx-text-fill: #6d4c41;" />
+         <Label fx:id="labelTotal" text="Rp 0"
+                maxWidth="1.7976931348623157E308"
+                alignment="CENTER_RIGHT"
+                style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #2c1a0e;"
+                HBox.hgrow="ALWAYS" />
+      </HBox>
+
+      <!-- Pilih Metode Bayar -->
+      <Label text="Pilih Metode Pembayaran"
+             style="-fx-font-size: 13px; -fx-text-fill: #8d6e63; -fx-font-weight: bold;">
+         <VBox.margin><Insets top="24.0" bottom="10.0" /></VBox.margin>
+      </Label>
+
+      <HBox spacing="12" alignment="CENTER">
+         <!-- Tombol Cash -->
+         <Button text="💵  Cash"
+                 onAction="#pilihCash"
+                 maxWidth="1.7976931348623157E308"
+                 HBox.hgrow="ALWAYS"
+                 style="-fx-background-color: linear-gradient(to bottom, #5d4037, #3e2723);
+                        -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;
+                        -fx-background-radius: 10; -fx-padding: 14; -fx-cursor: hand;" />
+
+         <!-- Tombol QRIS -->
+         <Button text="📱  QRIS"
+                 onAction="#pilihQris"
+                 maxWidth="1.7976931348623157E308"
+                 HBox.hgrow="ALWAYS"
+                 style="-fx-background-color: linear-gradient(to bottom, #1565c0, #0d47a1);
+                        -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;
+                        -fx-background-radius: 10; -fx-padding: 14; -fx-cursor: hand;" />
+      </HBox>
+
+      <!-- Label Metode Terpilih -->
+      <Label fx:id="labelMetode" text=""
+             style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #3e2723;">
+         <VBox.margin><Insets top="20.0" /></VBox.margin>
+      </Label>
+
+      <!-- Panel CASH -->
+      <VBox fx:id="boxCash" spacing="10">
+         <VBox.margin><Insets top="10.0" /></VBox.margin>
+         <Label text="Jumlah uang yang diterima:" style="-fx-font-size: 12px; -fx-text-fill: #6d4c41;" />
+         <HBox spacing="10" alignment="CENTER">
+            <Label text="Rp" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #3e2723;" />
+            <TextField fx:id="inputCash"
+                       promptText="Masukkan jumlah uang..."
+                       maxWidth="1.7976931348623157E308"
+                       HBox.hgrow="ALWAYS"
+                       style="-fx-font-size: 14px; -fx-padding: 10; -fx-background-radius: 8;
+                              -fx-border-color: #d4c4b0; -fx-border-radius: 8; -fx-border-width: 1;" />
+         </HBox>
+         <Button fx:id="btnBayarCash"
+                 text="✔  Proses Pembayaran Cash"
+                 onAction="#prosesPaymentCash"
+                 maxWidth="1.7976931348623157E308"
+                 styleClass="pay-button" />
+      </VBox>
+
+      <!-- Panel QRIS -->
+      <VBox fx:id="boxQris" spacing="12" alignment="CENTER">
+         <VBox.margin><Insets top="10.0" /></VBox.margin>
+
+         <!-- Simulasi QR Code -->
+         <VBox alignment="CENTER" spacing="4"
+               style="-fx-background-color: white; -fx-border-color: #3e2723;
+                      -fx-border-width: 3; -fx-border-radius: 10; -fx-background-radius: 10;
+                      -fx-padding: 16;">
+            <Label text="▛▀▀▀▀▀▜  ▛▀▀▀▀▀▜" style="-fx-font-family: monospace; -fx-font-size: 11px; -fx-text-fill: #1a0a00;" />
+            <Label text="█ ▄▄▄ █  █ ▄▄▄ █" style="-fx-font-family: monospace; -fx-font-size: 11px; -fx-text-fill: #1a0a00;" />
+            <Label text="█ ███ █  █ ███ █" style="-fx-font-family: monospace; -fx-font-size: 11px; -fx-text-fill: #1a0a00;" />
+            <Label text="▙▄▄▄▄▄▟  ▙▄▄▄▄▄▟" style="-fx-font-family: monospace; -fx-font-size: 11px; -fx-text-fill: #1a0a00;" />
+            <Label text="  ▄ ▄▄  ▀▀ ▄▄ ▄  " style="-fx-font-family: monospace; -fx-font-size: 11px; -fx-text-fill: #1a0a00;" />
+            <Label text="▛▀▀▀▀▀▜  ▛▀▀▀▀▀▜" style="-fx-font-family: monospace; -fx-font-size: 11px; -fx-text-fill: #1a0a00;" />
+            <Label text="█ ▄▄▄ █  █ ▄▄▄ █" style="-fx-font-family: monospace; -fx-font-size: 11px; -fx-text-fill: #1a0a00;" />
+            <Label text="▙▄▄▄▄▄▟  ▙▄▄▄▄▄▟" style="-fx-font-family: monospace; -fx-font-size: 11px; -fx-text-fill: #1a0a00;" />
+            <Label text="☕ Trakteer Kopi" style="-fx-font-size: 11px; -fx-text-fill: #8d6e63; -fx-font-weight: bold;" />
+         </VBox>
+
+         <Label text="Scan QR di atas dengan aplikasi e-wallet kamu"
+                style="-fx-font-size: 11px; -fx-text-fill: #8d6e63; -fx-text-alignment: center;"
+                wrapText="true" />
+
+         <Button fx:id="btnBayarQris"
+                 text="✔  Konfirmasi Pembayaran QRIS"
+                 onAction="#prosesPaymentQris"
+                 maxWidth="1.7976931348623157E308"
+                 style="-fx-background-color: linear-gradient(to bottom, #1565c0, #0d47a1);
+                        -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold;
+                        -fx-background-radius: 10; -fx-padding: 12; -fx-cursor: hand;" />
+      </VBox>
+
+      <!-- Info / Status -->
+      <Label fx:id="labelInfo" text="" wrapText="true">
+         <VBox.margin><Insets top="12.0" /></VBox.margin>
+      </Label>
+
+      <!-- Kembalian -->
+      <VBox fx:id="boxKembalian" spacing="6"
+            style="-fx-background-color: #e8f5e9; -fx-background-radius: 10; -fx-padding: 14;">
+         <VBox.margin><Insets top="10.0" /></VBox.margin>
+         <Label text="💰  Kembalian" style="-fx-font-size: 13px; -fx-text-fill: #388e3c; -fx-font-weight: bold;" />
+         <Label fx:id="labelKembalianValue" text="Rp 0"
+                style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1b5e20;" />
+      </VBox>
+
+      <!-- Garis bawah -->
+      <Label maxWidth="1.7976931348623157E308"
+             style="-fx-border-color: #e8d8c5; -fx-border-width: 1 0 0 0; -fx-pref-height: 1;">
+         <VBox.margin><Insets top="20.0" bottom="10.0" /></VBox.margin>
+      </Label>
+
+      <!-- Tombol Kembali -->
+      <Button text="← Kembali ke Kasir"
+              onAction="#kembaliKeKasir"
+              style="-fx-background-color: transparent; -fx-text-fill: #8d6e63;
+                     -fx-font-size: 13px; -fx-cursor: hand; -fx-underline: true;" />
+   </VBox>
+</StackPane>
