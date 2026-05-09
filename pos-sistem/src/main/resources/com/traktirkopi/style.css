@@ -25,6 +25,37 @@
   -fx-border-width: 0 1 0 0; /* Border kanan saja */
 }
 
+/* --- Sidebar Buttons --- */
+.sidebar-btn-active {
+  -fx-background-color: white;
+  -fx-text-fill: #8c6d5e;
+  -fx-background-radius: 12;
+  -fx-padding: 10 15;
+  -fx-font-weight: bold;
+  -fx-font-size: 13px;
+  -fx-cursor: hand;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.04), 6, 0, 0, 1);
+}
+
+.sidebar-btn {
+  -fx-background-color: transparent;
+  -fx-text-fill: #82746f;
+  -fx-background-radius: 12;
+  -fx-padding: 10 15;
+  -fx-font-size: 13px;
+  -fx-cursor: hand;
+}
+
+.sidebar-btn:hover {
+  -fx-background-color: rgba(113, 85, 71, 0.06);
+  -fx-text-fill: #50443f;
+}
+
+.sidebar-btn:pressed {
+  -fx-background-color: rgba(113, 85, 71, 0.12);
+  -fx-text-fill: #50443f;
+}
+
 .top-header {
   -fx-background-color: -fx-bg-surface;
   -fx-border-color: -fx-outline;
@@ -129,4 +160,381 @@
   -fx-border-color: #1a1c1c;
   -fx-border-width: 0 0 2 0;
   -fx-font-weight: bold;
+}
+
+/* --- Modern TableView (Cart) --- */
+.table-view {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-padding: 0;
+}
+
+.table-view .column-header-background {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+}
+
+.table-view .column-header-background .filler {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+}
+
+.table-view .column-header {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent transparent #e2e2e2 transparent;
+  -fx-border-width: 0 0 1 0;
+  -fx-padding: 8 10 8 10;
+}
+
+.table-view .column-header .label {
+  -fx-font-weight: bold;
+  -fx-text-fill: #50443f;
+  -fx-font-size: 12px;
+}
+
+.table-view .table-row-cell {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent transparent #f0f0f0 transparent;
+  -fx-border-width: 0 0 1 0;
+  -fx-padding: 6 0 6 0;
+}
+
+.table-view .table-row-cell:selected {
+  -fx-background-color: #ffdbcb;
+  -fx-text-fill: #1a1c1c;
+}
+
+.table-view .table-row-cell:selected .text {
+  -fx-fill: #1a1c1c;
+}
+
+.table-view .table-row-cell:empty {
+  -fx-border-color: transparent;
+}
+
+.table-view .table-cell {
+  -fx-text-fill: #1a1c1c;
+  -fx-font-size: 13px;
+  -fx-padding: 4 10 4 10;
+  -fx-border-color: transparent;
+}
+
+/* Remove vertical column divider lines */
+.table-view .column-header .column-drag-header,
+.table-view .column-header .column-resize-line {
+  -fx-background-color: transparent;
+}
+
+/* Remove scroll bar track styling for cleaner look */
+.table-view .scroll-bar:horizontal,
+.table-view .scroll-bar:vertical {
+  -fx-background-color: transparent;
+}
+
+.table-view .scroll-bar .thumb {
+  -fx-background-color: #d3c3bc;
+  -fx-background-radius: 10;
+}
+
+.table-view .scroll-bar .increment-button,
+.table-view .scroll-bar .decrement-button {
+  -fx-background-color: transparent;
+  -fx-padding: 0;
+}
+
+.table-view .scroll-bar .increment-arrow,
+.table-view .scroll-bar .decrement-arrow {
+  -fx-shape: " ";
+  -fx-padding: 0;
+}
+
+/* Remove the default empty table placeholder styling */
+.table-view .placeholder .label {
+  -fx-text-fill: #82746f;
+  -fx-font-size: 13px;
+}
+
+/* --- Global Scrollbar Override --- */
+.scroll-bar:horizontal,
+.scroll-bar:vertical {
+  -fx-background-color: transparent;
+  -fx-pref-width: 8;
+  -fx-pref-height: 8;
+}
+
+.scroll-bar .track {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-background-radius: 10;
+}
+
+.scroll-bar .thumb {
+  -fx-background-color: rgba(113, 85, 71, 0.25);
+  -fx-background-radius: 10;
+  -fx-background-insets: 2;
+}
+
+.scroll-bar .thumb:hover {
+  -fx-background-color: rgba(113, 85, 71, 0.45);
+}
+
+.scroll-bar .thumb:pressed {
+  -fx-background-color: rgba(113, 85, 71, 0.6);
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+  -fx-background-color: transparent;
+  -fx-padding: 0;
+  -fx-pref-width: 0;
+  -fx-pref-height: 0;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+  -fx-shape: " ";
+  -fx-padding: 0;
+}
+
+.scroll-bar > .track-background {
+  -fx-background-color: transparent;
+}
+
+/* --- Logout Button --- */
+.btn-logout {
+  -fx-background-color: rgba(147, 0, 10, 0.08);
+  -fx-text-fill: #b3261e;
+  -fx-background-radius: 10;
+  -fx-padding: 10 18;
+  -fx-font-size: 12px;
+  -fx-font-weight: bold;
+  -fx-cursor: hand;
+}
+
+.btn-logout:hover {
+  -fx-background-color: rgba(147, 0, 10, 0.16);
+  -fx-text-fill: #93000a;
+}
+
+.btn-logout:pressed {
+  -fx-background-color: rgba(147, 0, 10, 0.24);
+  -fx-text-fill: #93000a;
+}
+
+/* --- Customer Name TextField (seamless) --- */
+.customer-name-field {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-border-width: 0;
+  -fx-padding: 4 0;
+  -fx-font-size: 13px;
+  -fx-text-fill: #1a1c1c;
+  -fx-prompt-text-fill: #a09a97;
+  -fx-background-insets: 0;
+  -fx-background-radius: 0;
+}
+
+.customer-name-field:focused {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent transparent #d3c3bc transparent;
+  -fx-border-width: 0 0 1.5 0;
+  -fx-effect: none;
+}
+
+/* --- Payment Method Buttons (Card / Cash) --- */
+.btn-payment {
+  -fx-background-color: white;
+  -fx-border-color: #e2e2e2;
+  -fx-border-radius: 10;
+  -fx-background-radius: 10;
+  -fx-padding: 15;
+  -fx-font-weight: bold;
+  -fx-font-size: 14px;
+  -fx-text-fill: #50443f;
+  -fx-cursor: hand;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.06), 8, 0, 0, 2);
+}
+
+.btn-payment:hover {
+  -fx-background-color: #fdfcfb;
+  -fx-border-color: #d3c3bc;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.10), 12, 0, 0, 3);
+}
+
+.btn-payment:pressed {
+  -fx-background-color: #ffdbcb;
+  -fx-border-color: #715547;
+  -fx-border-width: 1.5;
+  -fx-text-fill: #715547;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.04), 4, 0, 0, 1);
+}
+
+.btn-payment-active {
+  -fx-background-color: #fff3ed;
+  -fx-border-color: #715547;
+  -fx-border-width: 2;
+  -fx-text-fill: #715547;
+  -fx-effect: dropshadow(gaussian, rgba(113, 85, 71, 0.12), 10, 0, 0, 2);
+}
+
+/* --- Cart Row Delete Button --- */
+.btn-row-delete {
+  -fx-background-color: transparent;
+  -fx-text-fill: #b3261e;
+  -fx-font-size: 13px;
+  -fx-padding: 2 6;
+  -fx-cursor: hand;
+  -fx-background-radius: 50%;
+}
+
+.btn-row-delete:hover {
+  -fx-background-color: #ffdad6;
+  -fx-text-fill: #93000a;
+}
+
+.btn-row-delete:pressed {
+  -fx-background-color: #f4b8b3;
+  -fx-text-fill: #93000a;
+}
+
+/* --- Clear Cart Button (subtle, next to header) --- */
+.btn-clear-cart {
+  -fx-background-color: transparent;
+  -fx-text-fill: #82746f;
+  -fx-font-size: 12px;
+  -fx-padding: 4 10;
+  -fx-background-radius: 6;
+  -fx-cursor: hand;
+}
+
+.btn-clear-cart:hover {
+  -fx-background-color: #ffdad6;
+  -fx-text-fill: #93000a;
+}
+
+.btn-clear-cart:pressed {
+  -fx-background-color: #f4b8b3;
+  -fx-text-fill: #93000a;
+}
+
+/* --- ScrollPane background cleanup --- */
+.scroll-pane {
+  -fx-background-color: transparent;
+  -fx-background: transparent;
+}
+
+.scroll-pane > .viewport {
+  -fx-background-color: transparent;
+}
+
+.scroll-pane > .corner {
+  -fx-background-color: transparent;
+}
+
+/* ==========================================================================
+   5. LOGIN SCREEN STYLES
+   ========================================================================== */
+
+.login-brand-panel {
+  -fx-background-color: linear-gradient(to bottom right, #8c6d5e, #50443f);
+}
+
+.login-brand-title {
+  -fx-font-size: 36px;
+  -fx-font-weight: bold;
+  -fx-text-fill: white;
+}
+
+.login-brand-subtitle {
+  -fx-font-size: 14px;
+  -fx-text-fill: rgba(255, 255, 255, 0.8);
+}
+
+.login-form-panel {
+  -fx-background-color: -fx-bg-surface;
+}
+
+.login-welcome {
+  -fx-font-size: 28px;
+  -fx-font-weight: bold;
+  -fx-text-fill: -fx-text-primary;
+}
+
+.login-subtitle {
+  -fx-font-size: 14px;
+  -fx-text-fill: -fx-text-secondary;
+}
+
+.login-field-label {
+  -fx-font-size: 13px;
+  -fx-font-weight: bold;
+  -fx-text-fill: -fx-text-primary;
+}
+
+.login-input {
+  -fx-background-color: -fx-bg-main;
+  -fx-border-color: -fx-outline;
+  -fx-border-radius: 8;
+  -fx-background-radius: 8;
+  -fx-padding: 12 16;
+  -fx-font-size: 14px;
+  -fx-text-fill: -fx-text-primary;
+}
+
+.login-input:focused {
+  -fx-border-color: #8c6d5e;
+  -fx-background-color: white;
+}
+
+.login-btn {
+  -fx-background-color: #715547;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-font-size: 15px;
+  -fx-background-radius: 8;
+  -fx-padding: 12;
+  -fx-cursor: hand;
+}
+
+.login-btn:hover {
+  -fx-background-color: #50443f;
+}
+
+.login-error {
+  -fx-text-fill: #b3261e;
+  -fx-font-size: 12px;
+}
+
+
+/* ==========================================================================
+   6. BACK OFFICE STYLES
+   ========================================================================== */
+
+.backoffice-header {
+  -fx-background-color: -fx-bg-surface;
+  -fx-border-color: -fx-outline;
+  -fx-border-width: 0 0 1 0;
+}
+
+.backoffice-search {
+  -fx-background-color: -fx-bg-main;
+  -fx-border-color: -fx-outline;
+  -fx-border-radius: 20;
+  -fx-background-radius: 20;
+  -fx-padding: 8 16;
+  -fx-font-size: 13px;
+}
+
+.backoffice-btn-add {
+  -fx-background-color: #536346;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-font-size: 13px;
+  -fx-background-radius: 8;
+  -fx-padding: 8 16;
+  -fx-cursor: hand;
+}
+
+.backoffice-btn-add:hover {
+  -fx-background-color: #3b4832;
 }

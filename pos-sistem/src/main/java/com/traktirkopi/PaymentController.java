@@ -44,7 +44,7 @@ public class PaymentController {
     }
 
     @FXML
-    private void pilihCash() {
+    public void pilihCash() {
         labelMetode.setText("💵  Pembayaran Cash");
         boxCash.setVisible(true);
         boxCash.setManaged(true);
@@ -57,7 +57,7 @@ public class PaymentController {
     }
 
     @FXML
-    private void pilihQris() {
+    public void pilihQris() {
         labelMetode.setText("📱  Pembayaran QRIS");
         boxQris.setVisible(true);
         boxQris.setManaged(true);

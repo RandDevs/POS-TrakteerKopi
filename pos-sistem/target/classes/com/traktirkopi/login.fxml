@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox prefHeight="768.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.traktirkopi.LoginController">
+
+   <!-- Left Branding Panel -->
+   <VBox alignment="CENTER" prefWidth="500" spacing="20" styleClass="login-brand-panel">
+      <children>
+         <Label style="-fx-font-size: 48px; -fx-text-fill: white; -fx-font-weight: bold;" text="☕" />
+         <Label styleClass="login-brand-title" text="Trakteer Kopi" />
+         <Label styleClass="login-brand-subtitle" text="Premium coffee, brewed with love." />
+      </children>
+   </VBox>
+
+   <!-- Right Login Form -->
+   <StackPane HBox.hgrow="ALWAYS" styleClass="login-form-panel">
+      <children>
+         <VBox alignment="CENTER" maxWidth="380" spacing="24">
+            <children>
+               <!-- Header -->
+               <VBox spacing="6">
+                  <children>
+                     <Label styleClass="login-welcome" text="Welcome Back" />
+                     <Label styleClass="login-subtitle" text="Sign in to your POS account" />
+                  </children>
+               </VBox>
+
+               <!-- Form Fields -->
+               <VBox spacing="16">
+                  <children>
+                     <VBox spacing="6">
+                        <children>
+                           <Label styleClass="login-field-label" text="Username" />
+                           <TextField fx:id="usernameField" promptText="Enter your username" styleClass="login-input" />
+                        </children>
+                     </VBox>
+                     <VBox spacing="6">
+                        <children>
+                           <Label styleClass="login-field-label" text="Password" />
+                           <PasswordField fx:id="passwordField" promptText="Enter your password" styleClass="login-input" />
+                        </children>
+                     </VBox>
+                  </children>
+               </VBox>
+
+               <!-- Error Label -->
+               <Label fx:id="errorLabel" styleClass="login-error" />
+
+               <!-- Sign In Button -->
+               <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#login" styleClass="login-btn" text="Sign In" />
+
+               <!-- Footer -->
+               <Label style="-fx-text-fill: #a09a97; -fx-font-size: 11px;" text="© 2025 Trakteer Kopi — Point of Sale System" />
+            </children>
+            <padding>
+               <Insets bottom="40" left="40" right="40" top="40" />
+            </padding>
+         </VBox>
+      </children>
+   </StackPane>
+
+</HBox>

@@ -17,8 +17,10 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        scene = new Scene(loadFXML("login"), 1280, 768);
+        stage.setTitle("Trakteer Kopi — Point of Sale");
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
     }
 
