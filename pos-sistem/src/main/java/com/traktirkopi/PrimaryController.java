@@ -425,6 +425,15 @@ public class PrimaryController {
             return;
         }
 
+        String customerName = customerNameField.getText();
+        if (customerName == null || customerName.trim().isEmpty()) {
+            CustomDialogBuilder.showWarning(
+                "Missing Information",
+                "Customer Name is required before proceeding to payment."
+            );
+            return;
+        }
+
         if ("QRIS".equals(selectedPaymentMethod)) {
             showQrisModal();
         } else {
@@ -564,19 +573,20 @@ public class PrimaryController {
         modal.initStyle(StageStyle.UNDECORATED);
         modal.setTitle("Cash Payment");
 
-        VBox root = new VBox(16);
-        root.setPadding(new Insets(36, 40, 40, 40));
+        VBox root = new VBox(12);
+        root.setPadding(new Insets(24, 32, 24, 32));
         root.setAlignment(Pos.TOP_CENTER);
-        root.setStyle("-fx-background-color: #fdfcfb; -fx-background-radius: 16; -fx-border-color: #d3c3bc; -fx-border-radius: 16; -fx-border-width: 1; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 15, 0, 0, 5);");
+        // Added stronger drop shadow and thicker border for elegant visual depth
+        root.setStyle("-fx-background-color: #fdfcfb; -fx-background-radius: 16; -fx-border-color: #d3c3bc; -fx-border-radius: 16; -fx-border-width: 2; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 25, 0, 0, 8);");
 
         // Title
         Label titleLabel = new Label("\ud83d\udcb5  Cash Payment");
         titleLabel.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1a1c1c;");
 
         // Total Due
-        VBox totalBox = new VBox(4);
+        VBox totalBox = new VBox(2);
         totalBox.setAlignment(Pos.CENTER);
-        totalBox.setPadding(new Insets(16));
+        totalBox.setPadding(new Insets(10));
         totalBox.setStyle("-fx-background-color: #f7f3f0; -fx-background-radius: 12;");
         Label totalDueLabel = new Label("Total Tagihan");
         totalDueLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #82746f;");
@@ -592,15 +602,20 @@ public class PrimaryController {
         cashInput.setPromptText("Masukkan jumlah...");
         cashInput.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-background-color: white; -fx-border-color: #e2e2e2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 12 16;");
         cashInput.setMaxWidth(Double.MAX_VALUE);
+        cashInput.setEditable(false);
 
-        // Quick Action Buttons (FlowPane for wrapping)
-        FlowPane quickButtons = new FlowPane();
+        // Quick Action Buttons (Balanced 2x3 GridPane)
+        javafx.scene.layout.GridPane quickButtons = new javafx.scene.layout.GridPane();
         quickButtons.setHgap(8);
         quickButtons.setVgap(8);
         quickButtons.setAlignment(Pos.CENTER);
+        
+        javafx.scene.layout.ColumnConstraints cc = new javafx.scene.layout.ColumnConstraints();
+        cc.setPercentWidth(33.33);
+        quickButtons.getColumnConstraints().addAll(cc, cc, cc);
 
         Button btnExact = createQuickButton("Uang Pas");
-        btnExact.setOnAction(e -> cashInput.setText(String.format("%.0f", totalBelanja)));
+        btnExact.setOnAction(e -> cashInput.setText(String.format(Locale.US, "%.0f", totalBelanja)));
 
         Button btn20k = createQuickButton("Rp 20,000");
         btn20k.setOnAction(e -> cashInput.setText("20000"));
@@ -611,15 +626,26 @@ public class PrimaryController {
         Button btn100k = createQuickButton("Rp 100,000");
         btn100k.setOnAction(e -> cashInput.setText("100000"));
 
+        Button btn150k = createQuickButton("Rp 150,000");
+        btn150k.setOnAction(e -> cashInput.setText("150000"));
+
         Button btn200k = createQuickButton("Rp 200,000");
         btn200k.setOnAction(e -> cashInput.setText("200000"));
 
-        quickButtons.getChildren().addAll(btnExact, btn20k, btn50k, btn100k, btn200k);
+        quickButtons.add(btnExact, 0, 0);
+        quickButtons.add(btn20k, 1, 0);
+        quickButtons.add(btn50k, 2, 0);
+        quickButtons.add(btn100k, 0, 1);
+        quickButtons.add(btn150k, 1, 1);
+        quickButtons.add(btn200k, 2, 1);
+        
+        // Add Numpad
+        javafx.scene.layout.GridPane numpad = createNumpad(cashInput);
 
         // Change Display
-        VBox changeBox = new VBox(4);
+        VBox changeBox = new VBox(2);
         changeBox.setAlignment(Pos.CENTER);
-        changeBox.setPadding(new Insets(16));
+        changeBox.setPadding(new Insets(10));
         changeBox.setStyle("-fx-background-color: #f7f3f0; -fx-background-radius: 12;");
         Label changeLabel = new Label("Kembalian");
         changeLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #82746f;");
@@ -698,9 +724,9 @@ public class PrimaryController {
         btnCancel.setStyle("-fx-background-color: transparent; -fx-text-fill: #82746f; -fx-font-size: 13px; -fx-cursor: hand; -fx-padding: 8;");
         btnCancel.setOnAction(e -> modal.close());
 
-        root.getChildren().addAll(titleLabel, totalBox, inputLabel, cashInput, quickButtons, changeBox, errorLabel, btnPay, btnCancel);
+        root.getChildren().addAll(titleLabel, totalBox, inputLabel, cashInput, quickButtons, numpad, changeBox, errorLabel, btnPay, btnCancel);
 
-        Scene scene = new Scene(root, 440, 680);
+        Scene scene = new Scene(root, 460, 800);
         scene.setFill(null);
         modal.setScene(scene);
         modal.showAndWait();
@@ -708,10 +734,50 @@ public class PrimaryController {
 
     private Button createQuickButton(String text) {
         Button btn = new Button(text);
-        btn.setStyle("-fx-background-color: white; -fx-border-color: #d3c3bc; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 16; -fx-font-size: 12px; -fx-text-fill: #715547; -fx-font-weight: bold; -fx-cursor: hand;");
-        HBox.setHgrow(btn, Priority.ALWAYS);
+        btn.setStyle("-fx-background-color: white; -fx-border-color: #d3c3bc; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10 12; -fx-font-size: 13px; -fx-text-fill: #715547; -fx-font-weight: bold; -fx-cursor: hand;");
+        btn.setOnMouseEntered(e -> btn.setStyle("-fx-background-color: #f7f3f0; -fx-border-color: #d3c3bc; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10 12; -fx-font-size: 13px; -fx-text-fill: #715547; -fx-font-weight: bold; -fx-cursor: hand;"));
+        btn.setOnMouseExited(e -> btn.setStyle("-fx-background-color: white; -fx-border-color: #d3c3bc; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10 12; -fx-font-size: 13px; -fx-text-fill: #715547; -fx-font-weight: bold; -fx-cursor: hand;"));
         btn.setMaxWidth(Double.MAX_VALUE);
         return btn;
+    }
+
+    private javafx.scene.layout.GridPane createNumpad(TextField targetField) {
+        javafx.scene.layout.GridPane numpad = new javafx.scene.layout.GridPane();
+        numpad.setAlignment(Pos.CENTER);
+        numpad.setHgap(8);
+        numpad.setVgap(8);
+
+        String[][] keys = {
+            {"1", "2", "3"},
+            {"4", "5", "6"},
+            {"7", "8", "9"},
+            {"⌫", "0", "000"}
+        };
+
+        for (int row = 0; row < 4; row++) {
+            for (int col = 0; col < 3; col++) {
+                String key = keys[row][col];
+                Button btn = new Button(key);
+                btn.setPrefSize(80, 50);
+                btn.setStyle("-fx-background-color: #f0ebe9; -fx-text-fill: #1a1c1c; -fx-font-size: 18px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;");
+                
+                btn.setOnMouseEntered(e -> btn.setStyle("-fx-background-color: #e2dcd8; -fx-text-fill: #1a1c1c; -fx-font-size: 18px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;"));
+                btn.setOnMouseExited(e -> btn.setStyle("-fx-background-color: #f0ebe9; -fx-text-fill: #1a1c1c; -fx-font-size: 18px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;"));
+
+                btn.setOnAction(e -> {
+                    if (key.equals("⌫")) {
+                        String current = targetField.getText();
+                        if (!current.isEmpty()) {
+                            targetField.setText(current.substring(0, current.length() - 1));
+                        }
+                    } else {
+                        targetField.setText(targetField.getText() + key);
+                    }
+                });
+                numpad.add(btn, col, row);
+            }
+        }
+        return numpad;
     }
 
     private void hitungTotal() {
@@ -749,16 +815,16 @@ public class PrimaryController {
             return;
         }
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Clear Order");
-        alert.setHeaderText("Clear entire order?");
-        alert.setContentText("Are you sure you want to clear the entire current order?");
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            cartData.clear();
-            hitungTotal();
-        }
+        CustomDialogBuilder.showConfirmation(
+            "Clear Order",
+            "Are you sure you want to clear the entire current order?",
+            "Clear",
+            "#b3261e",
+            () -> {
+                cartData.clear();
+                hitungTotal();
+            }
+        );
     }
 
     // ── Navigation Logic ────────────────────────────────────────────────
@@ -872,28 +938,27 @@ public class PrimaryController {
             centerPane.setCenter(backofficeView);
         } catch (IOException e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Failed to load Back Office");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
+            CustomDialogBuilder.showWarning(
+                "Error",
+                "Failed to load Back Office: " + e.getMessage()
+            );
         }
     }
 
     @FXML
     private void logout() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Logout");
-        alert.setHeaderText("Logout of POS?");
-        alert.setContentText("Are you sure you want to logout?");
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            try {
-                App.setRoot("login");
-            } catch (IOException e) {
-                e.printStackTrace();
+        CustomDialogBuilder.showConfirmation(
+            "Logout",
+            "Are you sure you want to log out and end the current session?",
+            "Logout",
+            "#b3261e",
+            () -> {
+                try {
+                    App.setRoot("login");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        }
+        );
     }
 }

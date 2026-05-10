@@ -25,13 +25,19 @@
 
    <!-- Orders Table -->
    <TableView fx:id="ordersTable" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
+      <placeholder>
+         <Label text="No transactions yet today." style="-fx-text-fill: #a09a97; -fx-font-size: 14px; -fx-font-style: italic;" />
+      </placeholder>
+      <columnResizePolicy>
+         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+      </columnResizePolicy>
       <columns>
-         <TableColumn prefWidth="120" text="Order ID" />
-         <TableColumn prefWidth="160" text="Time" />
-         <TableColumn prefWidth="180" text="Customer" />
-         <TableColumn prefWidth="140" text="Payment Method" />
-         <TableColumn prefWidth="140" text="Total Amount" />
-         <TableColumn prefWidth="120" text="Actions" />
+         <TableColumn prefWidth="120" text="ORDER ID" />
+         <TableColumn prefWidth="160" text="TIME" />
+         <TableColumn prefWidth="180" text="CUSTOMER" />
+         <TableColumn prefWidth="140" text="PAYMENT METHOD" />
+         <TableColumn prefWidth="140" text="TOTAL AMOUNT" />
+         <TableColumn prefWidth="120" text="ACTIONS" />
       </columns>
       <VBox.margin>
          <Insets bottom="20" left="20" right="20" top="10" />

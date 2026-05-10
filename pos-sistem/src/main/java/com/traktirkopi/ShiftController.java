@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -74,6 +75,7 @@ public class ShiftController {
         TextField cashInput = new TextField();
         cashInput.setPromptText("Rp 0");
         cashInput.setStyle("-fx-background-color: white; -fx-border-color: #e2e2e2; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10; -fx-font-size: 16px;");
+        cashInput.setEditable(false);
         // Strict numeric formatter
         cashInput.setTextFormatter(new TextFormatter<>(change -> {
             if (change.getText().matches("[0-9]*")) {
@@ -83,6 +85,8 @@ public class ShiftController {
         }));
 
         inputGrp.getChildren().addAll(lblCash, cashInput);
+
+        GridPane numpad = createNumpad(cashInput);
 
         Label errorLabel = new Label();
         errorLabel.setStyle("-fx-text-fill: #b3261e; -fx-font-size: 12px;");
@@ -121,9 +125,9 @@ public class ShiftController {
         HBox.setHgrow(spacer, Priority.ALWAYS);
         btnBox.getChildren().addAll(spacer, btnCancel, btnStart);
 
-        root.getChildren().addAll(title, inputGrp, errorLabel, btnBox);
+        root.getChildren().addAll(title, inputGrp, numpad, errorLabel, btnBox);
 
-        Scene scene = new Scene(root, 360, 260);
+        Scene scene = new Scene(root, 360, 540);
         scene.setFill(null);
         modal.setScene(scene);
         modal.showAndWait();
@@ -155,11 +159,14 @@ public class ShiftController {
         TextField cashInput = new TextField();
         cashInput.setPromptText("Rp 0");
         cashInput.setStyle("-fx-background-color: white; -fx-border-color: #e2e2e2; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10; -fx-font-size: 16px;");
+        cashInput.setEditable(false);
         cashInput.setTextFormatter(new TextFormatter<>(change -> {
             if (change.getText().matches("[0-9]*")) return change;
             return null;
         }));
         inputGrp.getChildren().addAll(lblCash, cashInput);
+
+        GridPane numpad = createNumpad(cashInput);
 
         Label errorLabel = new Label();
         errorLabel.setStyle("-fx-text-fill: #b3261e; -fx-font-size: 12px;");
@@ -176,7 +183,7 @@ public class ShiftController {
         HBox.setHgrow(spacer1, Priority.ALWAYS);
         btnBox1.getChildren().addAll(spacer1, btnCancel1, btnCalc);
 
-        step1Box.getChildren().addAll(inputGrp, errorLabel, btnBox1);
+        step1Box.getChildren().addAll(inputGrp, numpad, errorLabel, btnBox1);
 
         // STEP 2: Summary
         VBox step2Box = new VBox(15);
@@ -270,10 +277,49 @@ public class ShiftController {
 
         root.getChildren().addAll(title, step1Box, step2Box);
 
-        Scene scene = new Scene(root, 400, 420);
+        Scene scene = new Scene(root, 400, 680);
         scene.setFill(null);
         modal.setScene(scene);
         modal.showAndWait();
+    }
+
+    private GridPane createNumpad(TextField targetField) {
+        GridPane numpad = new GridPane();
+        numpad.setAlignment(Pos.CENTER);
+        numpad.setHgap(10);
+        numpad.setVgap(10);
+
+        String[][] keys = {
+            {"1", "2", "3"},
+            {"4", "5", "6"},
+            {"7", "8", "9"},
+            {"⌫", "0", "000"}
+        };
+
+        for (int row = 0; row < 4; row++) {
+            for (int col = 0; col < 3; col++) {
+                String key = keys[row][col];
+                Button btn = new Button(key);
+                btn.setPrefSize(70, 60);
+                btn.setStyle("-fx-background-color: #f0ebe9; -fx-text-fill: #1a1c1c; -fx-font-size: 20px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;");
+                
+                btn.setOnMouseEntered(e -> btn.setStyle("-fx-background-color: #e2dcd8; -fx-text-fill: #1a1c1c; -fx-font-size: 20px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;"));
+                btn.setOnMouseExited(e -> btn.setStyle("-fx-background-color: #f0ebe9; -fx-text-fill: #1a1c1c; -fx-font-size: 20px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;"));
+
+                btn.setOnAction(e -> {
+                    if (key.equals("⌫")) {
+                        String current = targetField.getText();
+                        if (!current.isEmpty()) {
+                            targetField.setText(current.substring(0, current.length() - 1));
+                        }
+                    } else {
+                        targetField.setText(targetField.getText() + key);
+                    }
+                });
+                numpad.add(btn, col, row);
+            }
+        }
+        return numpad;
     }
 
     private HBox createSummaryRow(String label, double amount, boolean isBold) {

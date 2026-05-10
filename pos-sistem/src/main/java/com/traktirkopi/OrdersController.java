@@ -40,6 +40,7 @@ public class OrdersController {
     private void setupTable() {
         // Order ID
         TableColumn<Transaction, String> colId = (TableColumn<Transaction, String>) ordersTable.getColumns().get(0);
+        colId.getStyleClass().add("col-left-align");
         colId.setCellValueFactory(new PropertyValueFactory<>("orderId"));
         colId.setCellFactory(col -> new TableCell<Transaction, String>() {
             @Override
@@ -57,10 +58,12 @@ public class OrdersController {
 
         // Time
         TableColumn<Transaction, String> colTime = (TableColumn<Transaction, String>) ordersTable.getColumns().get(1);
+        colTime.getStyleClass().add("col-left-align");
         colTime.setCellValueFactory(new PropertyValueFactory<>("formattedTime"));
 
         // Customer
         TableColumn<Transaction, String> colCust = (TableColumn<Transaction, String>) ordersTable.getColumns().get(2);
+        colCust.getStyleClass().add("col-left-align");
         colCust.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         colCust.setCellFactory(col -> new TableCell<Transaction, String>() {
             @Override
@@ -78,10 +81,33 @@ public class OrdersController {
 
         // Payment Method
         TableColumn<Transaction, String> colPay = (TableColumn<Transaction, String>) ordersTable.getColumns().get(3);
+        colPay.getStyleClass().add("col-center-align");
         colPay.setCellValueFactory(new PropertyValueFactory<>("paymentMethod"));
+        colPay.setCellFactory(col -> new TableCell<Transaction, String>() {
+            @Override
+            protected void updateItem(String method, boolean empty) {
+                super.updateItem(method, empty);
+                if (empty || method == null) {
+                    setGraphic(null);
+                } else {
+                    Label badge = new Label(method);
+                    if ("Cash".equalsIgnoreCase(method)) {
+                        badge.setStyle("-fx-background-color: #e6f4ea; -fx-text-fill: #137333; -fx-padding: 4 12; -fx-background-radius: 12; -fx-font-size: 12px; -fx-font-weight: bold;");
+                    } else if ("QRIS".equalsIgnoreCase(method)) {
+                        badge.setStyle("-fx-background-color: #e8f0fe; -fx-text-fill: #1967d2; -fx-padding: 4 12; -fx-background-radius: 12; -fx-font-size: 12px; -fx-font-weight: bold;");
+                    } else {
+                        badge.setStyle("-fx-background-color: #f1f3f4; -fx-text-fill: #3c4043; -fx-padding: 4 12; -fx-background-radius: 12; -fx-font-size: 12px; -fx-font-weight: bold;");
+                    }
+                    HBox box = new HBox(badge);
+                    box.setAlignment(Pos.CENTER);
+                    setGraphic(box);
+                }
+            }
+        });
 
         // Total Amount
         TableColumn<Transaction, Double> colTotal = (TableColumn<Transaction, Double>) ordersTable.getColumns().get(4);
+        colTotal.getStyleClass().add("col-right-align");
         colTotal.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
         colTotal.setCellFactory(col -> new TableCell<Transaction, Double>() {
             @Override
@@ -98,11 +124,14 @@ public class OrdersController {
 
         // Actions
         TableColumn<Transaction, Void> colActions = (TableColumn<Transaction, Void>) ordersTable.getColumns().get(5);
+        colActions.getStyleClass().add("col-center-align");
         colActions.setSortable(false);
         colActions.setCellFactory(col -> new TableCell<Transaction, Void>() {
-            private final Button btnView = new Button("📄 View Detail");
+            private final Button btnView = new Button("🧾");
             {
-                btnView.setStyle("-fx-background-color: #f7f3f0; -fx-text-fill: #715547; -fx-font-size: 13px; -fx-background-radius: 8; -fx-padding: 6 12; -fx-cursor: hand;");
+                btnView.setStyle("-fx-background-color: transparent; -fx-text-fill: #82746f; -fx-font-size: 18px; -fx-background-radius: 8; -fx-padding: 4 8; -fx-cursor: hand;");
+                btnView.setOnMouseEntered(e -> btnView.setStyle("-fx-background-color: #f7f3f0; -fx-text-fill: #715547; -fx-font-size: 18px; -fx-background-radius: 8; -fx-padding: 4 8; -fx-cursor: hand;"));
+                btnView.setOnMouseExited(e -> btnView.setStyle("-fx-background-color: transparent; -fx-text-fill: #82746f; -fx-font-size: 18px; -fx-background-radius: 8; -fx-padding: 4 8; -fx-cursor: hand;"));
                 
                 btnView.setOnAction(e -> {
                     Transaction item = getTableView().getItems().get(getIndex());
@@ -117,7 +146,7 @@ public class OrdersController {
                     setGraphic(null);
                 } else {
                     HBox box = new HBox(btnView);
-                    box.setAlignment(Pos.CENTER_LEFT);
+                    box.setAlignment(Pos.CENTER);
                     setGraphic(box);
                 }
             }

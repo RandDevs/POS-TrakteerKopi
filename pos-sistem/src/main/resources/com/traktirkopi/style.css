@@ -181,22 +181,39 @@
 
 .table-view .column-header {
   -fx-background-color: transparent;
-  -fx-border-color: transparent transparent #e2e2e2 transparent;
-  -fx-border-width: 0 0 1 0;
-  -fx-padding: 8 10 8 10;
+  -fx-border-color: transparent transparent #d3c3bc transparent;
+  -fx-border-width: 0 0 2 0;
+  -fx-padding: 12 10 12 10;
 }
 
 .table-view .column-header .label {
   -fx-font-weight: bold;
-  -fx-text-fill: #50443f;
+  -fx-text-fill: #82746f;
   -fx-font-size: 12px;
+}
+
+.col-left-align {
+  -fx-alignment: CENTER-LEFT;
+}
+
+.col-center-align {
+  -fx-alignment: CENTER;
+}
+
+.col-right-align {
+  -fx-alignment: CENTER-RIGHT;
 }
 
 .table-view .table-row-cell {
   -fx-background-color: transparent;
   -fx-border-color: transparent transparent #f0f0f0 transparent;
   -fx-border-width: 0 0 1 0;
-  -fx-padding: 6 0 6 0;
+  -fx-padding: 10 0 10 0;
+  -fx-fixed-cell-size: 55;
+}
+
+.table-view .table-row-cell:hover {
+  -fx-background-color: #f7f3f0;
 }
 
 .table-view .table-row-cell:selected {
